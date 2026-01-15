@@ -65,15 +65,19 @@ def handle_dialogue(dialogue):
     while True:
         for line in current_segment["lines"]:
             print_dialogue(line)
-
+        if d.currentlocation == "treasure":
+            if d.rooms["treasure"]["item"]:
+                print_instruction("Items in this room:")
+                for it in d.rooms["treasure"]["item"]:
+                    print_notif("- " + it)
         if not current_segment["options"]:
             return
 
         for choice in current_segment["options"]:
             print(choice, end="   ")
         print()
-
-        dialogue_choice = input(">").strip().lower()
+        
+        dialogue_choice = input(">").lower()
 
      
         if d.currentlocation == "chamber" and dialogue_choice == "chair":
@@ -84,7 +88,7 @@ def handle_dialogue(dialogue):
 
         if dialogue_choice == "translate":
             show_scripture()
-            answer = input("Type your translation:\n>").strip().upper()
+            answer = input("Type your translation:\n>").upper()
 
             if answer == "DO NOT TOUCH THE DIAMOND":
                 current_segment = dialogue["correct_translation"]
