@@ -4,9 +4,9 @@ d1 = {
             "Welcome to Cursed Pyramid!",
             "Scout: Hello, Traveler!",
             "Scout: I heard there is a valuable treasure..",
-            "Scout: Would you like to join me in this adventure?"
+            
         ],
-        "options": ["yes", "no"]
+        "options": []
     },
 
     "no": {
@@ -148,7 +148,7 @@ d1 = {
             "Wrong translation.",
             "Scout: Try again carefully."
         ],
-        "options": ["translate"]
+        "options": []
     },
     "correct_translation": {
         "lines": [

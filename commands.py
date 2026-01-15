@@ -57,52 +57,49 @@ def handle_use(targetItem):
         if not itemUsed:
             print_dialogue("You can do nothing with this here.")
     else:
-        print_dialogue("You don't have this item.")
+        print_dialogue("You don't have this item.")     
 
 def handle_dialogue(dialogue):
-    current_segment =  dialogue[d.currentlocation+"_talk"]
-    dialgue_ended = False
-    while not dialgue_ended:
+    current_segment = dialogue[d.currentlocation + "_talk"]
+
+    while True:
         for line in current_segment["lines"]:
             print_dialogue(line)
 
-        if d.currentlocation == "treasure":
-            if d.rooms["treasure"]["item"]:
-                print_instruction("Items in this room:")
-                for it in d.rooms["treasure"]["item"]:
-                    print_notif("- " + it)
+        if not current_segment["options"]:
+            return
 
+        for choice in current_segment["options"]:
+            print(choice, end="   ")
+        print()
 
-        if current_segment["options"] == []:
-            dialgue_ended = True
-        else:
-            for choice in current_segment["options"]:
-                print(choice, end="    ")
-            print("")
+        dialogue_choice = input(">").strip().lower()
 
-            dialogue_choice = input(">")
+     
+        if d.currentlocation == "chamber" and dialogue_choice == "chair":
+            if d.rooms["chamber"]["locked doors"] != "":
+                d.rooms["chamber"]["locked doors"] = ""
+                print_notif("A hidden mechanism clicks... the door is now unlocked!")
+            return   
 
-            if dialogue_choice == "translate":
-                show_scripture()
-                answer = input("Type your translation:\n>").upper()
+        if dialogue_choice == "translate":
+            show_scripture()
+            answer = input("Type your translation:\n>").strip().upper()
 
-                if answer == "DO NOT TOUCH THE DIAMOND":
-                    current_segment = dialogue["correct_translation"]
-                else:
-                    current_segment = dialogue["wrong_translation"]
-                continue
+            if answer == "DO NOT TOUCH THE DIAMOND":
+                current_segment = dialogue["correct_translation"]
+            else:
+                current_segment = dialogue["wrong_translation"]
+            continue
 
-            while dialogue_choice not in current_segment["options"]:
-                dialogue_choice = input(">")
+       
+        if dialogue_choice not in current_segment["options"]:
+            print_notif("Invalid choice.")
+            continue
 
-            current_segment = dialogue[dialogue_choice]
-            
-            if d.currentlocation == "chamber" and dialogue_choice == "chair":
-                    d.rooms["chamber"]["locked doors"] = ""
-                    print_notif("A hidden mechanism clicks... the north door is now unlocked!")
+      
+        return
 
-            
-            
 def show_scripture():
     script = {
         "A": "@",
